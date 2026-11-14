@@ -2,21 +2,20 @@
 
 API REST da atividade de Back-end da Geração Tech 4.0, conforme o [escopo oficial da Digital College](https://github.com/digitalcollegebr/projeto-backend). Entrega: link do repositório GitHub até **20/11/2026**.
 
-[Repositório de entrega](https://github.com/Liucera/digital-store-backend) · [Baixar projeto em ZIP](https://github.com/Liucera/digital-store-backend/archive/refs/heads/main.zip)
+[Repositório de entrega](https://github.com/Liucera/digital-store-backend)
 
 O projeto usa Node.js, Express, Dotenv, Nodemon, MySQL, Sequelize, JWT, bcrypt e Jest. Disponibiliza CRUD de usuários, categorias e produtos, imagens, opções, filtros e documentação Swagger/OpenAPI. A estrutura separa rotas, controladores, serviços e modelos.
 
 ## Preparar o ambiente
 
-Requisitos: **Node.js 22.12 ou superior**, npm e **MySQL 8.4** em execução. Abra a pasta do projeto no VS Code, na mesma pasta do `package.json`.
+Requisitos: **Node.js 22.12 ou superior**, npm e **MySQL 8.4** em execução.
 
-No seu computador, a pasta indicada é `E:\Geração Tech 4.0\Digital Store Backend`. No terminal **PowerShell** do VS Code:
+Clone o repositório e acesse o diretório do projeto:
 
-```powershell
-cd "E:\Geração Tech 4.0\Digital Store Backend"
+```bash
+git clone https://github.com/Liucera/digital-store-backend.git
+cd digital-store-backend
 ```
-
-No **CMD**, use `cd /d "E:\Geração Tech 4.0\Digital Store Backend"`. Ao extrair o pacote, confira que `package.json` está diretamente nessa pasta.
 
 Instale as versões registradas no projeto:
 
