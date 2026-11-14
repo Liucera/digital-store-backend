@@ -1,0 +1,1812 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Digital Store — API Back-end",
+    "version": "1.0.0",
+    "description": "API REST do projeto acadêmico da Geração Tech 4.0. Escopo: https://github.com/digitalcollegebr/projeto-backend. Cadastro e login são públicos; operações protegidas usam JWT HS256. A ausência ou invalidade do token retorna 401, seguindo os contratos individuais dos endpoints. A seção 05/requisito 02 do enunciado diverge e menciona 400. Respostas 204 não possuem corpo. Limite do corpo JSON: 10 MB. Erros: {\"message\":\"Descrição do erro.\"}."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Servidor atual"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Usuários",
+      "description": "Cadastro, autenticação e manutenção da própria conta."
+    },
+    {
+      "name": "Categorias",
+      "description": "Consulta e manutenção do catálogo de categorias."
+    },
+    {
+      "name": "Produtos",
+      "description": "Produtos, imagens, opções e filtros."
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/v1/user": {
+      "post": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Cadastrar usuário",
+        "operationId": "createUser",
+        "security": [],
+        "responses": {
+          "201": {
+            "description": "Usuário cadastrado. A senha e seu hash não são retornados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/token": {
+      "post": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Gerar token JWT",
+        "operationId": "createToken",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Token gerado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            }
+          }
+        },
+        "description": "Endpoint público. Credenciais incorretas retornam 400, conforme o contrato oficial. Validade configurada por JWT_EXPIRES_IN."
+      }
+    },
+    "/v1/user/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Consultar usuário",
+        "operationId": "getUser",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Dados públicos do usuário.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "description": "Consulta pública prevista no escopo acadêmico. Nunca retorna password ou hash."
+      },
+      "put": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Atualizar o próprio usuário",
+        "operationId": "updateUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuário atualizado; resposta sem corpo."
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Excluir o próprio usuário",
+        "operationId": "deleteUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuário excluído; resposta sem corpo."
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/v1/category/search": {
+      "get": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Buscar categorias",
+        "operationId": "searchCategories",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Categorias filtradas e paginadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategorySearch"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "description": "Campos retornados, separados por vírgula. O retorno contém somente os campos solicitados. Campos aceitos: id, name, slug, use_in_menu.",
+            "schema": {
+              "type": "string",
+              "example": "name,slug"
+            }
+          },
+          {
+            "name": "use_in_menu",
+            "in": "query",
+            "required": false,
+            "description": "Filtra pelo uso no menu. Aceita true ou false.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/category": {
+      "post": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Cadastrar categoria",
+        "operationId": "createCategory",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Categoria cadastrada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryCreate"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/category/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Consultar categoria",
+        "operationId": "getCategory",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Categoria encontrada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Atualizar categoria",
+        "operationId": "updateCategory",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Categoria atualizada; resposta sem corpo."
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryUpdate"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categorias"
+        ],
+        "summary": "Excluir categoria",
+        "operationId": "deleteCategory",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Categoria e seus vínculos excluídos; produtos preservados. Resposta sem corpo."
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/v1/product/search": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Buscar produtos",
+        "operationId": "searchProducts",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Produtos filtrados e paginados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSearch"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "description": "Filtros são combinados. Categorias e valores do mesmo filtro aceitam alternativas. Filtros de opções diferentes são combinados. Não filtra automaticamente produtos desabilitados.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "description": "Campos retornados, separados por vírgula. O retorno contém somente os campos solicitados. Campos aceitos: id, enabled, name, slug, use_in_menu, stock, description, price, price_with_discount, category_ids, images, options.",
+            "schema": {
+              "type": "string",
+              "example": "name,images,price"
+            }
+          },
+          {
+            "name": "match",
+            "in": "query",
+            "required": false,
+            "description": "Termo que combina com o nome ou a descrição.",
+            "schema": {
+              "type": "string",
+              "example": "camiseta"
+            }
+          },
+          {
+            "name": "category_ids",
+            "in": "query",
+            "required": false,
+            "description": "IDs de categorias separados por vírgula; aceita associação com qualquer uma delas.",
+            "schema": {
+              "type": "string",
+              "example": "1,2"
+            }
+          },
+          {
+            "name": "price-range",
+            "in": "query",
+            "required": false,
+            "description": "Faixa inclusiva no campo price, no formato mínimo-máximo.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9]+(?:\\.[0-9]+)?-[0-9]+(?:\\.[0-9]+)?$",
+              "example": "50-100"
+            }
+          },
+          {
+            "name": "option",
+            "in": "query",
+            "required": false,
+            "description": "Filtros por ID de opção. Exemplo {\"45\":\"P,M\"} gera option[45]=P,M. Substitua 45 por um ID existente.",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "example": {
+                "45": "P,M"
+              }
+            },
+            "style": "deepObject",
+            "explode": true
+          }
+        ]
+      }
+    },
+    "/v1/product": {
+      "post": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Cadastrar produto",
+        "operationId": "createProduct",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Produto cadastrado com suas relações.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductCreate"
+              },
+              "example": {
+                "enabled": true,
+                "name": "Camiseta preta",
+                "slug": "camiseta-preta",
+                "stock": 10,
+                "description": "Camiseta preta de manga curta.",
+                "price": 79.9,
+                "price_with_discount": 69.9,
+                "category_ids": [],
+                "options": [
+                  {
+                    "title": "Tamanho",
+                    "shape": "square",
+                    "radius": 4,
+                    "type": "text",
+                    "values": [
+                      "P",
+                      "M",
+                      "G"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "description": "Categorias devem existir. Imagens são PNG/JPEG base64 (até 5 MB cada). A operação de banco é transacional."
+      }
+    },
+    "/v1/product/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Consultar produto",
+        "operationId": "getProduct",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Produto com categorias, imagens e opções.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Atualizar produto e relações",
+        "operationId": "updateProduct",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Produto atualizado; resposta sem corpo."
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "413": {
+            "$ref": "#/components/responses/Error413"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductUpdate"
+              },
+              "example": {
+                "stock": 20,
+                "category_ids": []
+              }
+            }
+          }
+        },
+        "description": "Campos e itens omitidos são preservados. Em images/options: id altera; id com deleted:true exclui; sem id adiciona. IDs de outro produto são inválidos. category_ids substitui todos os vínculos."
+      },
+      "delete": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Excluir produto",
+        "operationId": "deleteProduct",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Produto, relações e arquivos locais excluídos; resposta sem corpo."
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Cole somente o token retornado em POST /v1/user/token."
+      }
+    },
+    "parameters": {
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "Identificador inteiro positivo do recurso.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "Limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "description": "Itens por página. Use -1 para retornar todos, ignorando page. Outros valores devem ser inteiros positivos.",
+        "schema": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "enum": [
+                -1
+              ]
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            }
+          ],
+          "default": 12
+        }
+      },
+      "Page": {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "Página positiva. Ignorada quando limit=-1; nesse caso o retorno informa page:1.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "maximum": 2147483647
+        }
+      }
+    },
+    "responses": {
+      "Error400": {
+        "description": "Dados inválidos, identificador inválido, duplicidade ou credenciais incorretas.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Dados da requisição inválidos."
+            }
+          }
+        }
+      },
+      "Error401": {
+        "description": "Token Bearer ausente, inválido, expirado ou vinculado a usuário removido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Token de autenticação inválido."
+            }
+          }
+        }
+      },
+      "Error403": {
+        "description": "O usuário autenticado não é o titular da conta solicitada.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Você não pode alterar outro usuário."
+            }
+          }
+        }
+      },
+      "Error404": {
+        "description": "Recurso não encontrado.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Recurso não encontrado."
+            }
+          }
+        }
+      },
+      "Error413": {
+        "description": "Corpo JSON acima de 10 MB.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Corpo da requisição excede o limite permitido."
+            }
+          }
+        }
+      },
+      "Error500": {
+        "description": "Erro inesperado; detalhes internos não são expostos.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Erro interno do servidor."
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "id",
+          "firstname",
+          "surname",
+          "email"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "firstname": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Maria"
+          },
+          "surname": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Silva"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "example": "maria@example.com"
+          }
+        }
+      },
+      "UserCreate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "firstname",
+          "surname",
+          "email",
+          "password",
+          "confirmPassword"
+        ],
+        "properties": {
+          "firstname": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Maria"
+          },
+          "surname": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Silva"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "example": "maria@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 6,
+            "description": "Senha com no mínimo seis caracteres e no máximo 72 bytes UTF-8.",
+            "example": "Senha@123"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "format": "password",
+            "minLength": 6,
+            "description": "Deve ser igual a password.",
+            "example": "Senha@123"
+          }
+        }
+      },
+      "UserUpdate": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "description": "Atualização parcial. Ao informar password, informe também confirmPassword igual. confirmPassword isolado é inválido.",
+        "properties": {
+          "firstname": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Maria"
+          },
+          "surname": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Silva"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "example": "maria@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 6,
+            "description": "Senha com no mínimo seis caracteres e no máximo 72 bytes UTF-8.",
+            "example": "Senha@123"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "format": "password",
+            "minLength": 6,
+            "description": "Deve ser igual a password.",
+            "example": "Senha@123"
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "example": "maria@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "Senha@123"
+          }
+        }
+      },
+      "Token": {
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "JWT assinado com HS256. Use em Authorization: Bearer <token>."
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "use_in_menu"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Camisetas"
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "example": "camisetas"
+          },
+          "use_in_menu": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "CategoryCreate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "slug"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Camisetas"
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "example": "camisetas"
+          },
+          "use_in_menu": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "CategoryUpdate": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Camisetas"
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "example": "camisetas"
+          },
+          "use_in_menu": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "Image": {
+        "type": "object",
+        "required": [
+          "id",
+          "content"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "content": {
+            "type": "string",
+            "description": "Caminho /uploads/<uuid>.png|jpg ou URL absoluta com PUBLIC_BASE_URL.",
+            "example": "/uploads/3fc4099d-f69f-481c-a3cf-7858bb6c8c56.png"
+          }
+        }
+      },
+      "ImageCreate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "content"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "default": false
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "image/png",
+              "image/jpeg",
+              "image/jpg"
+            ]
+          },
+          "content": {
+            "type": "string",
+            "format": "byte",
+            "description": "PNG/JPEG real codificado em base64 puro, sem prefixo data:. Máximo 5 MB decodificados.",
+            "example": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j3ioAAAAASUVORK5CYII="
+          }
+        }
+      },
+      "ImageUpdate": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Sem id, adiciona imagem (type e content obrigatórios). Com id, altera somente a imagem desse produto; deleted:true exclui. A URL atual pode ser reenviada para preservar o arquivo. URLs externas não são baixadas.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "image/png",
+              "image/jpeg",
+              "image/jpg"
+            ]
+          },
+          "content": {
+            "type": "string",
+            "description": "Base64 puro para substituir; URL atual para manter."
+          }
+        }
+      },
+      "Option": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "shape",
+          "radius",
+          "type",
+          "values"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Tamanho"
+          },
+          "shape": {
+            "type": "string",
+            "enum": [
+              "square",
+              "circle"
+            ],
+            "default": "square"
+          },
+          "radius": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "color"
+            ],
+            "default": "text"
+          },
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "description": "Textos sem vírgula. O total da representação CSV deve caber em 255 caracteres.",
+            "example": [
+              "P",
+              "M",
+              "G"
+            ]
+          }
+        }
+      },
+      "OptionCreate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title"
+        ],
+        "description": "Informe values ou value. O banco guarda valores como CSV e a resposta usa values como lista.",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Tamanho"
+          },
+          "shape": {
+            "type": "string",
+            "enum": [
+              "square",
+              "circle"
+            ],
+            "default": "square"
+          },
+          "radius": {
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2147483647
+              },
+              {
+                "type": "string",
+                "pattern": "^[0-9]+px$"
+              }
+            ],
+            "default": 0,
+            "example": 4
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "color"
+            ],
+            "default": "text"
+          },
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "description": "Textos sem vírgula. O total da representação CSV deve caber em 255 caracteres.",
+            "example": [
+              "P",
+              "M",
+              "G"
+            ]
+          },
+          "value": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "description": "Alias de values, por compatibilidade com os exemplos oficiais. Informe somente um dos dois campos.",
+            "example": [
+              "P",
+              "M",
+              "G"
+            ]
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "values"
+            ],
+            "not": {
+              "required": [
+                "value"
+              ]
+            }
+          },
+          {
+            "required": [
+              "value"
+            ],
+            "not": {
+              "required": [
+                "values"
+              ]
+            }
+          }
+        ]
+      },
+      "OptionUpdate": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Sem id, adiciona opção (title e values ou value obrigatórios). Com id, altera campos informados; deleted:true exclui. Itens omitidos permanecem. Não envie values e value juntos.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Tamanho"
+          },
+          "shape": {
+            "type": "string",
+            "enum": [
+              "square",
+              "circle"
+            ],
+            "default": "square"
+          },
+          "radius": {
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2147483647
+              },
+              {
+                "type": "string",
+                "pattern": "^[0-9]+px$"
+              }
+            ],
+            "default": 0,
+            "example": 4
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "color"
+            ],
+            "default": "text"
+          },
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "description": "Textos sem vírgula. O total da representação CSV deve caber em 255 caracteres.",
+            "example": [
+              "P",
+              "M",
+              "G"
+            ]
+          },
+          "value": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "description": "Alias de values, por compatibilidade com os exemplos oficiais. Informe somente um dos dois campos.",
+            "example": [
+              "P",
+              "M",
+              "G"
+            ]
+          }
+        }
+      },
+      "ProductCreate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "slug",
+          "price",
+          "price_with_discount"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "default": false
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Camiseta preta"
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "example": "camiseta-preta"
+          },
+          "use_in_menu": {
+            "type": "boolean",
+            "default": false
+          },
+          "stock": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647,
+            "default": 0
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Camiseta preta de manga curta."
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "example": 79.9
+          },
+          "price_with_discount": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "description": "Não pode exceder price. Zero representa ausência de desconto.",
+            "example": 69.9
+          },
+          "category_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "uniqueItems": true,
+            "example": []
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageCreate"
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionCreate"
+            }
+          }
+        }
+      },
+      "ProductUpdate": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "description": "Atualização parcial. category_ids substitui os vínculos; [] remove todos. Imagens/opções são alteradas por id e itens omitidos são preservados.",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "default": false
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Camiseta preta"
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "example": "camiseta-preta"
+          },
+          "use_in_menu": {
+            "type": "boolean",
+            "default": false
+          },
+          "stock": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647,
+            "default": 0
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Camiseta preta de manga curta."
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "example": 79.9
+          },
+          "price_with_discount": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "description": "Não pode exceder price. Zero representa ausência de desconto.",
+            "example": 69.9
+          },
+          "category_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "uniqueItems": true,
+            "example": []
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageUpdate"
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionUpdate"
+            }
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "required": [
+          "id",
+          "enabled",
+          "name",
+          "slug",
+          "stock",
+          "price",
+          "price_with_discount",
+          "category_ids",
+          "images",
+          "options"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "enabled": {
+            "type": "boolean",
+            "default": false
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Camiseta preta"
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "example": "camiseta-preta"
+          },
+          "use_in_menu": {
+            "type": "boolean",
+            "default": false
+          },
+          "stock": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647,
+            "default": 0
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Camiseta preta de manga curta."
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "example": 79.9
+          },
+          "price_with_discount": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "description": "Não pode exceder price. Zero representa ausência de desconto.",
+            "example": 69.9
+          },
+          "category_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "uniqueItems": true,
+            "example": []
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Image"
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            }
+          }
+        }
+      },
+      "CategorySearch": {
+        "type": "object",
+        "required": [
+          "data",
+          "total",
+          "limit",
+          "page"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "Cada item é completo ou contém somente os campos selecionados em fields.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "example": "Camisetas"
+                },
+                "slug": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                  "example": "camisetas"
+                },
+                "use_in_menu": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Total filtrado antes da paginação."
+          },
+          "limit": {
+            "type": "integer",
+            "example": 12
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 1
+          }
+        }
+      },
+      "ProductSearch": {
+        "type": "object",
+        "required": [
+          "data",
+          "total",
+          "limit",
+          "page"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "Cada item é completo ou contém somente os campos selecionados em fields.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "enabled": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "example": "Camiseta preta"
+                },
+                "slug": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                  "example": "camiseta-preta"
+                },
+                "use_in_menu": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "stock": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 2147483647,
+                  "default": 0
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 255,
+                  "example": "Camiseta preta de manga curta."
+                },
+                "price": {
+                  "type": "number",
+                  "format": "float",
+                  "minimum": 0,
+                  "example": 79.9
+                },
+                "price_with_discount": {
+                  "type": "number",
+                  "format": "float",
+                  "minimum": 0,
+                  "description": "Não pode exceder price. Zero representa ausência de desconto.",
+                  "example": 69.9
+                },
+                "category_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "uniqueItems": true,
+                  "example": []
+                },
+                "images": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Image"
+                  }
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Option"
+                  }
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Total filtrado antes da paginação."
+          },
+          "limit": {
+            "type": "integer",
+            "example": 12
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 1
+          }
+        }
+      }
+    }
+  }
+}
