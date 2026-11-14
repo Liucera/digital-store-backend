@@ -1,0 +1,10 @@
+
+> digital-store-backend@1.0.0 test
+> jest --runInBand --verbose --json --outputFile /workspace/work/jest-evidence-results.json
+
+Test Suites: 1 passed, 1 total
+Tests:       31 passed, 31 total
+Snapshots:   0 total
+Time:        5.22 s
+Ran all test suites.
+Test results written to: ../jest-evidence-results.json

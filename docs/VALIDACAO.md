@@ -36,20 +36,22 @@ O banco principal e o banco de testes devem ter nomes diferentes. A suíte pode 
 
 ## Registro de execução
 
-| Data | Ambiente | Comando ou fluxo | Resultado |
-| --- | --- | --- | --- |
-| 14/11/2026 | Node.js 24.22.1, npm 11.9.0, MySQL 8.4.13 | `db:create`, `db:migrate`, `db:create:test` | Bancos criados e seis migrations aplicadas |
-| 14/11/2026 | npm e lockfile | `npm ci` | Instalação limpa concluída; suíte executada novamente após a instalação |
-| 14/11/2026 | Jest/Supertest e MySQL real | `npm test` | **31 testes passaram**, incluindo CRUD, autenticação, autorização, filtros, relações, imagens e rollback |
-| 14/11/2026 | Banco descartável separado | Seis migrations up → down → up | Seis tabelas revertidas e recriadas; nova aplicação sem migrations pendentes |
-| 14/11/2026 | Swagger Parser | Validação de `src/docs/openapi.json` | OpenAPI válido com 15 operações |
-| 14/11/2026 | Chromium e Playwright | Cadastro → login → autorização → categoria → produto → busca pelo Swagger | Persistência e resposta conferidas; nenhum erro de JavaScript na página |
-| 14/11/2026 | Chromium e API HTTP | Exclusão dos registros temporários do fluxo | Respostas 204 sem corpo |
-| 14/11/2026 | Node.js | Verificação de sintaxe | 30 arquivos JavaScript válidos |
+Código verificado: [`1d68b4c`](https://github.com/Liucera/digital-store-backend/commit/1d68b4ce3be2bad6af7dd6006d7f640c3d999809). As datas e horas abaixo usam America/Sao_Paulo, UTC−3.
 
-A captura [Swagger no navegador](evidencias/swagger.png) registra a documentação e uma consulta executada. As requisições de teste usam dados fictícios. Nenhum segredo do ambiente está incluído no projeto.
+| Execução | Ambiente ou fluxo | Resultado observado |
+| --- | --- | --- |
+| 14/11/2026 às 17:50:41 a 17:50:47 | Node.js v24.22.1, npm 11.9.0, MySQL 8.4.13; Jest/Supertest | **31 testes aprovados**, sem falhas nem pendentes; saída 0 |
+| 14/11/2026 às 18:57:41 a 18:58:05 | Swagger UI no Chromium; API Express e MySQL real | **23 requisições capturadas**, cobrindo as 15 operações |
+| Mesma execução do Swagger | Cadastro, consulta, atualização e exclusão de usuário, categoria e produto | Status 200, 201 e 204; novos dados conferidos por GET após atualização |
+| Mesma execução do Swagger | Catálogo sem token e token de conta excluída | Status 401 em ambos os casos |
+| Mesma execução do Swagger | Consultas após exclusão | Status 404 para usuário, categoria e produto |
+| Mesma execução do Swagger | Encerramento | Registros fictícios excluídos; nenhum erro JavaScript não tratado na página |
 
-O teste do limite de upload utiliza um PNG com chunk tEXt e CRC válidos, de exatamente 5 MB; a mesma imagem com um byte além do limite é recusada. Também foram verificados JSON acima de 10 MB, substituição/exclusão de arquivos e rollback após salvar uma imagem nova.
+O [índice das evidências](evidencias/README.md) contém todas as capturas e suas legendas. A [saída real do Jest](evidencias/testes-jest.txt), o [resumo dos testes](evidencias/resumo-testes.json) e o [registro do Swagger](evidencias/execucao-swagger.json) permitem conferir os resultados e os horários. Os hashes SHA256 vinculam cada registro à sua imagem.
+
+As imagens mostram **Request URL** e **Server response** da requisição executada, sem usar **Example Value** como prova. São capturas diretas do navegador. O recorte do login omite o corpo com JWT; as demais imagens evitam o curl com Authorization. Os dados de usuário e catálogo são fictícios, criados apenas para teste. Nenhuma credencial do ambiente está incluída.
+
+As seis migrations também foram aplicadas, revertidas e reaplicadas em banco descartável na conferência anterior de 14/11/2026. O teste de upload utiliza um PNG válido de exatamente 5 MB; arquivo um byte acima do limite é recusado. A suíte inclui JSON acima de 10 MB, substituição/exclusão de arquivos e rollback após salvar uma imagem nova.
 
 ## Dependências
 

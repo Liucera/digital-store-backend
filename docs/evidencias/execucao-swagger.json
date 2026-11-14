@@ -1,0 +1,541 @@
+{
+  "started_at": "2026-11-14T18:57:41-03:00",
+  "timezone": "America/Sao_Paulo",
+  "source_commit": "1d68b4ce3be2bad6af7dd6006d7f640c3d999809",
+  "base_url": "http://127.0.0.1:3001",
+  "interface": "Swagger UI em Chromium",
+  "capture_method": "Captura direta do navegador da região Request URL e Server response; sem editar textos ou respostas.",
+  "privacy": "Tokens e senhas omitidos do JSON. A captura de login termina antes do corpo contendo JWT. O comando curl com Authorization fica fora das capturas.",
+  "test_data": "Registros fictícios exclusivos desta execução; excluídos ao final.",
+  "operations": [
+    {
+      "executed_at": "2026-11-14T18:57:45-03:00",
+      "operation_id": "createUser",
+      "method": "POST",
+      "request_url": "http://127.0.0.1:3001/v1/user",
+      "status": 201,
+      "request_body": {
+        "firstname": "Teste",
+        "surname": "Swagger",
+        "email": "evidencia.84c39a71a0@example.test",
+        "password": "[omitido]",
+        "confirmPassword": "[omitido]"
+      },
+      "response_body": {
+        "id": 7,
+        "firstname": "Teste",
+        "surname": "Swagger",
+        "email": "evidencia.84c39a71a0@example.test"
+      },
+      "screenshot": "swagger-01-usuario-cadastro-201.png",
+      "screenshot_sha256": "6925fb908c0d0117595e0537f25f17b536ac15023710b71dd2ca978555c078a1",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:46-03:00",
+      "operation_id": "createToken",
+      "method": "POST",
+      "request_url": "http://127.0.0.1:3001/v1/user/token",
+      "status": 200,
+      "request_body": {
+        "email": "evidencia.84c39a71a0@example.test",
+        "password": "[omitido]"
+      },
+      "response_body": {
+        "token": "[omitido]"
+      },
+      "screenshot": "swagger-02-autenticacao-200.png",
+      "screenshot_sha256": "6d665556bb9f343af9af9fb830926c99f6b91055b5854b3c9aa08ecedf6bab92",
+      "capture_note": "URL e status 200; corpo com JWT fica fora da captura por segurança."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:47-03:00",
+      "operation_id": "getUser",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/user/7",
+      "status": 200,
+      "request_body": null,
+      "response_body": {
+        "id": 7,
+        "firstname": "Teste",
+        "surname": "Swagger",
+        "email": "evidencia.84c39a71a0@example.test"
+      },
+      "screenshot": "swagger-03-usuario-consulta-200.png",
+      "screenshot_sha256": "7f0a27780d2a989392d55079b18542a1e7f9eeda2a91dfddd2b36ede9afd6529",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:48-03:00",
+      "operation_id": "updateUser",
+      "method": "PUT",
+      "request_url": "http://127.0.0.1:3001/v1/user/7",
+      "status": 204,
+      "request_body": {
+        "firstname": "Teste atualizado"
+      },
+      "response_body": null,
+      "screenshot": "swagger-04-usuario-atualizacao-204.png",
+      "screenshot_sha256": "e8ecc4a941ad0d994c624707e9c4872fd02af4fe0a46ec5fb5c2b7a32b105386",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:49-03:00",
+      "operation_id": "getUser",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/user/7",
+      "status": 200,
+      "request_body": null,
+      "response_body": {
+        "id": 7,
+        "firstname": "Teste atualizado",
+        "surname": "Swagger",
+        "email": "evidencia.84c39a71a0@example.test"
+      },
+      "screenshot": "swagger-05-usuario-atualizado-200.png",
+      "screenshot_sha256": "fc2b310545d410d93c6774a9919814134c7d04a40cceae16c4c1409c965fe7f4",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:50-03:00",
+      "operation_id": "createCategory",
+      "method": "POST",
+      "request_url": "http://127.0.0.1:3001/v1/category",
+      "status": 201,
+      "request_body": {
+        "name": "Categoria de teste",
+        "slug": "evidencia-84c39a71a0",
+        "use_in_menu": true
+      },
+      "response_body": {
+        "id": 6,
+        "name": "Categoria de teste",
+        "slug": "evidencia-84c39a71a0",
+        "use_in_menu": true
+      },
+      "screenshot": "swagger-06-categoria-cadastro-201.png",
+      "screenshot_sha256": "8c4e21a94a81744176bb7235ecfa19b5807d3043b555dcc723739c89bf02f512",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:51-03:00",
+      "operation_id": "searchCategories",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/category/search?limit=12",
+      "status": 200,
+      "request_body": null,
+      "response_body": {
+        "data": [
+          {
+            "id": 6,
+            "name": "Categoria de teste",
+            "slug": "evidencia-84c39a71a0",
+            "use_in_menu": true
+          }
+        ],
+        "total": 1,
+        "limit": 12,
+        "page": 1
+      },
+      "screenshot": "swagger-07-categorias-busca-200.png",
+      "screenshot_sha256": "314100699b24715698ac35e51d19697b3ea963d4944dd903783fa4c3c0142374",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:52-03:00",
+      "operation_id": "getCategory",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/category/6",
+      "status": 200,
+      "request_body": null,
+      "response_body": {
+        "id": 6,
+        "name": "Categoria de teste",
+        "slug": "evidencia-84c39a71a0",
+        "use_in_menu": true
+      },
+      "screenshot": "swagger-08-categoria-consulta-200.png",
+      "screenshot_sha256": "d44c28f14fac51b9f4b3226da960ffbed69294d13ef15b802b9dbe0082ef708f",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:53-03:00",
+      "operation_id": "updateCategory",
+      "method": "PUT",
+      "request_url": "http://127.0.0.1:3001/v1/category/6",
+      "status": 204,
+      "request_body": {
+        "name": "Categoria atualizada"
+      },
+      "response_body": null,
+      "screenshot": "swagger-09-categoria-atualizacao-204.png",
+      "screenshot_sha256": "1a9026f6ad5e819b9c2c5e02665e2c88d4933a32af19427a940e40efe3ce7f7e",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:53-03:00",
+      "operation_id": "getCategory",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/category/6",
+      "status": 200,
+      "request_body": null,
+      "response_body": {
+        "id": 6,
+        "name": "Categoria atualizada",
+        "slug": "evidencia-84c39a71a0",
+        "use_in_menu": true
+      },
+      "screenshot": "swagger-10-categoria-atualizada-200.png",
+      "screenshot_sha256": "120a048c5115e3a298841f325131f9d47c4ea24de9b8afbb25317ce7d1ff03a4",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:54-03:00",
+      "operation_id": "createProduct",
+      "method": "POST",
+      "request_url": "http://127.0.0.1:3001/v1/product",
+      "status": 201,
+      "request_body": {
+        "enabled": true,
+        "name": "Produto de teste",
+        "slug": "produto-evidencia-84c39a71a0",
+        "description": "Registro temporário da execução de testes.",
+        "stock": 5,
+        "price": 100,
+        "price_with_discount": 85,
+        "category_ids": [
+          6
+        ],
+        "images": [
+          {
+            "type": "image/png",
+            "content": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/iZk9HQAAAABJRU5ErkJggg=="
+          }
+        ],
+        "options": [
+          {
+            "title": "Tamanho",
+            "shape": "square",
+            "radius": 4,
+            "values": [
+              "P",
+              "M",
+              "G"
+            ]
+          }
+        ]
+      },
+      "response_body": {
+        "id": 6,
+        "enabled": true,
+        "name": "Produto de teste",
+        "slug": "produto-evidencia-84c39a71a0",
+        "use_in_menu": false,
+        "stock": 5,
+        "description": "Registro temporário da execução de testes.",
+        "price": 100,
+        "price_with_discount": 85,
+        "category_ids": [
+          6
+        ],
+        "images": [
+          {
+            "id": 2,
+            "content": "/uploads/73fba9b7-48a1-4bc9-a0dc-bc06dc1d457f.png"
+          }
+        ],
+        "options": [
+          {
+            "id": 6,
+            "title": "Tamanho",
+            "shape": "square",
+            "radius": 4,
+            "type": "text",
+            "values": [
+              "P",
+              "M",
+              "G"
+            ]
+          }
+        ]
+      },
+      "screenshot": "swagger-11-produto-cadastro-201.png",
+      "screenshot_sha256": "40568bbc282b50d00cb7825598c93d0ae5715712241492fbdfeddcb5a6a2d0f4",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:56-03:00",
+      "operation_id": "searchProducts",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/product/search?limit=12",
+      "status": 200,
+      "request_body": null,
+      "response_body": {
+        "data": [
+          {
+            "id": 6,
+            "enabled": true,
+            "name": "Produto de teste",
+            "slug": "produto-evidencia-84c39a71a0",
+            "use_in_menu": false,
+            "stock": 5,
+            "description": "Registro temporário da execução de testes.",
+            "price": 100,
+            "price_with_discount": 85,
+            "category_ids": [
+              6
+            ],
+            "images": [
+              {
+                "id": 2,
+                "content": "/uploads/73fba9b7-48a1-4bc9-a0dc-bc06dc1d457f.png"
+              }
+            ],
+            "options": [
+              {
+                "id": 6,
+                "title": "Tamanho",
+                "shape": "square",
+                "radius": 4,
+                "type": "text",
+                "values": [
+                  "P",
+                  "M",
+                  "G"
+                ]
+              }
+            ]
+          }
+        ],
+        "total": 1,
+        "limit": 12,
+        "page": 1
+      },
+      "screenshot": "swagger-12-produtos-busca-200.png",
+      "screenshot_sha256": "662f28d8c5b54dbafe4f761c9fb9eec86c35accb828290e6b65c3fa71e004d97",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:57-03:00",
+      "operation_id": "getProduct",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/product/6",
+      "status": 200,
+      "request_body": null,
+      "response_body": {
+        "id": 6,
+        "enabled": true,
+        "name": "Produto de teste",
+        "slug": "produto-evidencia-84c39a71a0",
+        "use_in_menu": false,
+        "stock": 5,
+        "description": "Registro temporário da execução de testes.",
+        "price": 100,
+        "price_with_discount": 85,
+        "category_ids": [
+          6
+        ],
+        "images": [
+          {
+            "id": 2,
+            "content": "/uploads/73fba9b7-48a1-4bc9-a0dc-bc06dc1d457f.png"
+          }
+        ],
+        "options": [
+          {
+            "id": 6,
+            "title": "Tamanho",
+            "shape": "square",
+            "radius": 4,
+            "type": "text",
+            "values": [
+              "P",
+              "M",
+              "G"
+            ]
+          }
+        ]
+      },
+      "screenshot": "swagger-13-produto-consulta-200.png",
+      "screenshot_sha256": "f6839bf3be9adfb96474bc3fa18a81665bfb10235598bf414dee197bfcb036a8",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:58-03:00",
+      "operation_id": "updateProduct",
+      "method": "PUT",
+      "request_url": "http://127.0.0.1:3001/v1/product/6",
+      "status": 204,
+      "request_body": {
+        "name": "Produto atualizado",
+        "stock": 9
+      },
+      "response_body": null,
+      "screenshot": "swagger-14-produto-atualizacao-204.png",
+      "screenshot_sha256": "d81e46c3d4fe5d4e2a8574d35cc7a7d4e83d6a0afcf95421a6bc57ead634d998",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:58-03:00",
+      "operation_id": "getProduct",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/product/6",
+      "status": 200,
+      "request_body": null,
+      "response_body": {
+        "id": 6,
+        "enabled": true,
+        "name": "Produto atualizado",
+        "slug": "produto-evidencia-84c39a71a0",
+        "use_in_menu": false,
+        "stock": 9,
+        "description": "Registro temporário da execução de testes.",
+        "price": 100,
+        "price_with_discount": 85,
+        "category_ids": [
+          6
+        ],
+        "images": [
+          {
+            "id": 2,
+            "content": "/uploads/73fba9b7-48a1-4bc9-a0dc-bc06dc1d457f.png"
+          }
+        ],
+        "options": [
+          {
+            "id": 6,
+            "title": "Tamanho",
+            "shape": "square",
+            "radius": 4,
+            "type": "text",
+            "values": [
+              "P",
+              "M",
+              "G"
+            ]
+          }
+        ]
+      },
+      "screenshot": "swagger-15-produto-atualizado-200.png",
+      "screenshot_sha256": "308b791d0f0b1de9c1e1d55516f8d81e006bd0d11f0731ab0e5bed6071223385",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:57:59-03:00",
+      "operation_id": "createCategory",
+      "method": "POST",
+      "request_url": "http://127.0.0.1:3001/v1/category",
+      "status": 401,
+      "request_body": {
+        "name": "Não autorizado",
+        "slug": "nao-autorizado-84c39a71a0"
+      },
+      "response_body": {
+        "message": "Envie um token de autorização Bearer válido."
+      },
+      "screenshot": "swagger-16-acesso-sem-token-401.png",
+      "screenshot_sha256": "acb3b29b72f72c9a42850c509f18a4414d6399bd77c1b2fe42bc37d83c399a0e",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:58:01-03:00",
+      "operation_id": "deleteProduct",
+      "method": "DELETE",
+      "request_url": "http://127.0.0.1:3001/v1/product/6",
+      "status": 204,
+      "request_body": null,
+      "response_body": null,
+      "screenshot": "swagger-17-produto-exclusao-204.png",
+      "screenshot_sha256": "1ceab6426f2da2be9a00f8d7522bc7f28c55d65d0337d8d305da792ae14087dd",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:58:01-03:00",
+      "operation_id": "getProduct",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/product/6",
+      "status": 404,
+      "request_body": null,
+      "response_body": {
+        "message": "Produto não encontrado."
+      },
+      "screenshot": "swagger-18-produto-excluido-404.png",
+      "screenshot_sha256": "cbb6630bb29bd6e28956b2bf9b3b560b04fa5d8e0bbc79e0e477e1909131f0d8",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:58:02-03:00",
+      "operation_id": "deleteCategory",
+      "method": "DELETE",
+      "request_url": "http://127.0.0.1:3001/v1/category/6",
+      "status": 204,
+      "request_body": null,
+      "response_body": null,
+      "screenshot": "swagger-19-categoria-exclusao-204.png",
+      "screenshot_sha256": "324b59f8dcc46426031e9900841fb89500b415168348d2b0165fe29ac7f5c74f",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:58:03-03:00",
+      "operation_id": "getCategory",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/category/6",
+      "status": 404,
+      "request_body": null,
+      "response_body": {
+        "message": "Categoria não encontrada."
+      },
+      "screenshot": "swagger-20-categoria-excluida-404.png",
+      "screenshot_sha256": "89bdd41c7d0be6ff3091c3883a5197ff320058b528769546ff3a253cfbcb56e9",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:58:03-03:00",
+      "operation_id": "deleteUser",
+      "method": "DELETE",
+      "request_url": "http://127.0.0.1:3001/v1/user/7",
+      "status": 204,
+      "request_body": null,
+      "response_body": null,
+      "screenshot": "swagger-21-usuario-exclusao-204.png",
+      "screenshot_sha256": "fc06c30063e835b8e3078a370ec81a36dbd6d190a00a610230adfae4fc480c27",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:58:04-03:00",
+      "operation_id": "getUser",
+      "method": "GET",
+      "request_url": "http://127.0.0.1:3001/v1/user/7",
+      "status": 404,
+      "request_body": null,
+      "response_body": {
+        "message": "Usuário não encontrado."
+      },
+      "screenshot": "swagger-22-usuario-excluido-404.png",
+      "screenshot_sha256": "1dd091a1d92f59905134d2077d423dbcc756a07f1dd5c894eee543de5136c6b2",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    },
+    {
+      "executed_at": "2026-11-14T18:58:04-03:00",
+      "operation_id": "createCategory",
+      "method": "POST",
+      "request_url": "http://127.0.0.1:3001/v1/category",
+      "status": 401,
+      "request_body": {
+        "name": "Não autorizado",
+        "slug": "conta-excluida-84c39a71a0"
+      },
+      "response_body": {
+        "message": "O usuário deste token não existe."
+      },
+      "screenshot": "swagger-23-token-de-conta-excluida-401.png",
+      "screenshot_sha256": "7407fec1f9177bb799910c623130d3ac57a72d6952e664df689ff1a0969520f3",
+      "capture_note": "URL, código HTTP e resposta retornada pelo servidor."
+    }
+  ],
+  "page_errors": [],
+  "cleanup": [],
+  "success": true,
+  "finished_at": "2026-11-14T18:58:05-03:00",
+  "all_temporary_records_deleted": true
+}

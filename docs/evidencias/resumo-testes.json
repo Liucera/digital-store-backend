@@ -1,0 +1,183 @@
+{
+  "started_at": "2026-11-14T17:50:41-03:00",
+  "finished_at": "2026-11-14T17:50:47-03:00",
+  "timezone": "America/Sao_Paulo",
+  "source_commit": "1d68b4ce3be2bad6af7dd6006d7f640c3d999809",
+  "command": [
+    "npm",
+    "test",
+    "--",
+    "--verbose",
+    "--json",
+    "--outputFile",
+    "/workspace/work/jest-evidence-results.json"
+  ],
+  "exit_code": 0,
+  "environment": {
+    "node": "v24.22.1",
+    "npm": "11.9.0",
+    "mysql": "8.4.13"
+  },
+  "success": true,
+  "tests_total": 31,
+  "tests_passed": 31,
+  "tests_failed": 0,
+  "tests_pending": 0,
+  "assertions": [
+    {
+      "name": "Migrations e documentação registra as seis migrations e mantém as chaves estrangeiras ativas",
+      "status": "passed",
+      "duration_ms": 75
+    },
+    {
+      "name": "Migrations e documentação publica Swagger e um contrato OpenAPI válido para os quinze endpoints",
+      "status": "passed",
+      "duration_ms": 297
+    },
+    {
+      "name": "Usuários e autenticação cadastra, consulta, autentica, atualiza e exclui o próprio usuário",
+      "status": "passed",
+      "duration_ms": 738
+    },
+    {
+      "name": "Usuários e autenticação recusa confirmação incorreta, e-mail inválido e cadastro duplicado",
+      "status": "passed",
+      "duration_ms": 464
+    },
+    {
+      "name": "Usuários e autenticação impede alteração e exclusão de outro usuário",
+      "status": "passed",
+      "duration_ms": 24
+    },
+    {
+      "name": "Usuários e autenticação rejeita tokens inválidos, expirados e assinados por outro algoritmo ou segredo",
+      "status": "passed",
+      "duration_ms": 14
+    },
+    {
+      "name": "Usuários e autenticação exige JWT em put /v1/user/1",
+      "status": "passed",
+      "duration_ms": 5
+    },
+    {
+      "name": "Usuários e autenticação exige JWT em delete /v1/user/1",
+      "status": "passed",
+      "duration_ms": 4
+    },
+    {
+      "name": "Usuários e autenticação exige JWT em post /v1/category",
+      "status": "passed",
+      "duration_ms": 4
+    },
+    {
+      "name": "Usuários e autenticação exige JWT em put /v1/category/1",
+      "status": "passed",
+      "duration_ms": 4
+    },
+    {
+      "name": "Usuários e autenticação exige JWT em delete /v1/category/1",
+      "status": "passed",
+      "duration_ms": 4
+    },
+    {
+      "name": "Usuários e autenticação exige JWT em post /v1/product",
+      "status": "passed",
+      "duration_ms": 4
+    },
+    {
+      "name": "Usuários e autenticação exige JWT em put /v1/product/1",
+      "status": "passed",
+      "duration_ms": 5
+    },
+    {
+      "name": "Usuários e autenticação exige JWT em delete /v1/product/1",
+      "status": "passed",
+      "duration_ms": 3
+    },
+    {
+      "name": "Categorias executa CRUD com respostas204 vazias e erros404",
+      "status": "passed",
+      "duration_ms": 41
+    },
+    {
+      "name": "Categorias aplica paginação, projeção, menu e limit=-1 ignorando page",
+      "status": "passed",
+      "duration_ms": 31
+    },
+    {
+      "name": "Categorias recusa slug duplicado e dados de categoria inválidos",
+      "status": "passed",
+      "duration_ms": 34
+    },
+    {
+      "name": "Produtos, imagens e opções cadastra relações e imagem real, persiste CSV e devolve arrays sem campos internos",
+      "status": "passed",
+      "duration_ms": 48
+    },
+    {
+      "name": "Produtos, imagens e opções atualiza relações parcialmente, conserva omitidos e remove arquivos excluídos",
+      "status": "passed",
+      "duration_ms": 85
+    },
+    {
+      "name": "Produtos, imagens e opções exclusão de produto remove vínculos, opções e arquivos, preservando categorias",
+      "status": "passed",
+      "duration_ms": 73
+    },
+    {
+      "name": "Produtos, imagens e opções exclusão de categoria preserva o produto e remove somente o vínculo",
+      "status": "passed",
+      "duration_ms": 54
+    },
+    {
+      "name": "Produtos, imagens e opções combina texto, categorias, faixa inclusiva, opções, paginação e projeção",
+      "status": "passed",
+      "duration_ms": 125
+    },
+    {
+      "name": "Produtos, imagens e opções não aceita imagem ou opção pertencente a outro produto e preserva a operação inteira",
+      "status": "passed",
+      "duration_ms": 128
+    },
+    {
+      "name": "Produtos, imagens e opções erro de unicidade não deixa produto, relações ou arquivos novos",
+      "status": "passed",
+      "duration_ms": 37
+    },
+    {
+      "name": "Produtos, imagens e opções rollback restaura relações e arquivos antigos após falha com arquivo novo já salvo",
+      "status": "passed",
+      "duration_ms": 58
+    },
+    {
+      "name": "Produtos, imagens e opções substituição de imagem publica novo arquivo e remove o anterior após confirmar o banco",
+      "status": "passed",
+      "duration_ms": 30
+    },
+    {
+      "name": "Produtos, imagens e opções aplica o limite de5MB por imagem sem falhar ao processar base64 grande",
+      "status": "passed",
+      "duration_ms": 608
+    },
+    {
+      "name": "Produtos, imagens e opções valida tipos, arquivos, opções e referências antes de persistir dados",
+      "status": "passed",
+      "duration_ms": 31
+    },
+    {
+      "name": "Produtos, imagens e opções recusa parâmetros de busca inválidos com400",
+      "status": "passed",
+      "duration_ms": 10
+    },
+    {
+      "name": "Erros HTTP JSON malformado retorna400 e rota desconhecida retorna404 com mensagem",
+      "status": "passed",
+      "duration_ms": 5
+    },
+    {
+      "name": "Erros HTTP corpo JSON acima de10MB retorna413 sem detalhes internos",
+      "status": "passed",
+      "duration_ms": 41
+    }
+  ]
+}
