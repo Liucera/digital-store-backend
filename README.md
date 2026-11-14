@@ -223,6 +223,6 @@ Cadastro e geração de token são públicos para permitir o primeiro acesso. Os
 
 ## Organização e entrega
 
-O [cronograma](docs/CRONOGRAMA.md) acompanha a entrega até **20/11/2026**. O [guia de entrega](docs/ENTREGA.md) traz os passos para publicação do repositório e conferência final.
+O [cronograma](docs/CRONOGRAMA.md) acompanha a entrega até **20/11/2026**.
 
 Participante: **Arlindo Barroso**. Caso a entrega seja realizada em equipe, informe os nomes dos demais integrantes, respeitando o limite de três pessoas.
